@@ -1,4 +1,4 @@
-![icon](pic/icon.png)
+<div align=center><img src="pic/icon.png"/></div>
 
 # OnlineCourses希沃在线课堂
 
