@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head> 
+    <meta charset="UTF-8"> <link rel="icon" href="/ico/favicon.ico">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="mobile-web-app-capable" content="yes">
+    <title>OnlineCourses</title>
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="white">
+    <link rel="stylesheet" href="/src/style.css">
+    <script src="https://apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js"></script>
+    </head>
+    <meta name="apple-mobile-web-app-title" content="OnlineCourses"/>
+  <body>
+    <div id="Main">
+        <div id="Player">
+            <video src="" id="video_player_1" class="video_player" preload></video>
+            <video src="" id="video_player_2" class="video_player" preload></video>
+            <div id="progress_bar">
+              <div id="progress"></div>
+              <div id="time"></div>
+              <div id="time_hover"></div>
+              <div id="loc"></div>
+              <div id="rate">1x</div>
+            </div>
+        </div>
+        <div id="Catalog"></div>
+        <div id="CatalogButton"></div>
+    </div>
+    <script type="module" src="/src/main.js"></script>
+  </body>
+</html>
