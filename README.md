@@ -26,8 +26,6 @@ Wonderful!
 
 1. 编译`server/`中程序.
 
-   编译:
-
    ```shell
    git clone https://github.com/yht0511/online-courses.git
    cd online-courses/server
