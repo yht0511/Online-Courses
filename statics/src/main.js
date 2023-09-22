@@ -57,12 +57,12 @@ var FROM = 0;
 var TO = 0;
 var START = 0;
 var BASETIME = 0;
-const RATE_MAP = [0.25, 0.5, 1, 1.25, 1.5, 2, 3, 5];
+var BASETIME_ARR = [];
+const RATE_MAP = [0.25, 0.5, 1, 1.25, 1.5, 2, 3, 5, 10];
 var RATE_NUM = 2;
+var paused = false;
 
-
-$("#time")[0].innerText = '00:00:00'
-
+$("#time")[0].innerText = "00:00:00";
 
 // 目录
 // 获取日期
@@ -299,6 +299,8 @@ function Play(date, from, to, start) {
     if (start_num == 9999) start_num = 0;
     var current_num = start_num;
     BASETIME = PlayList[start_num]["from"] - from;
+    BASETIME_ARR = PlayList.slice(0, start_num);
+    paused = false;
     $("#video_player_1")[0].removeEventListener("ended", switch_2);
     $("#video_player_2")[0].removeEventListener("ended", switch_1);
     $("#video_player_1")[0].pause();
@@ -316,13 +318,19 @@ function Play(date, from, to, start) {
     $("#video_player_1")[0].addEventListener("ended", switch_2);
     $("#video_player_2")[0].addEventListener("ended", switch_1);
 
+    $("#video_player_1")[0].playbackRate = RATE_MAP[RATE_NUM];
+    $("#video_player_2")[0].playbackRate = RATE_MAP[RATE_NUM];
+
     function switch_2() {
       console.log("切换到player2");
       $("#video_player_1")[0].pause();
       $("#video_player_1").hide();
       $("#video_player_2").show();
       $("#video_player_2")[0].play();
-      BASETIME += PlayList[current_num]["duration"];
+      if (BASETIME_ARR.indexOf(PlayList[current_num]) == -1) {
+        BASETIME_ARR.push(PlayList[current_num]);
+        BASETIME += PlayList[current_num]["duration"];
+      }
       current_num += 1;
       if (current_num >= PlayList.length) {
         return;
@@ -337,7 +345,10 @@ function Play(date, from, to, start) {
       $("#video_player_2").hide();
       $("#video_player_1").show();
       $("#video_player_1")[0].play();
-      BASETIME += PlayList[current_num]["duration"];
+      if (BASETIME_ARR.indexOf(PlayList[current_num]) == -1) {
+        BASETIME_ARR.push(PlayList[current_num]);
+        BASETIME += PlayList[current_num]["duration"];
+      }
       current_num += 1;
       if (current_num >= PlayList.length) {
         return;
@@ -349,6 +360,7 @@ function Play(date, from, to, start) {
 }
 
 $("#video_player_1")[0].addEventListener("timeupdate", function (e) {
+  if($("#video_player_1")[0].currentTime<=0) return;
   var percent =
     (100 * (BASETIME + $("#video_player_1")[0].currentTime)) / (TO - FROM);
   $("#progress")[0].style.width = percent + "%";
@@ -358,6 +370,7 @@ $("#video_player_1")[0].addEventListener("timeupdate", function (e) {
 });
 
 $("#video_player_2")[0].addEventListener("timeupdate", function (e) {
+  if($("#video_player_2")[0].currentTime<=0) return;
   var percent =
     (100 * (BASETIME + $("#video_player_2")[0].currentTime)) / (TO - FROM);
   $("#progress")[0].style.width = percent + "%";
@@ -414,16 +427,32 @@ $(document).keydown(function (event) {
       $("#video_player_2")[0].currentTime += 10;
   }
   if (event.keyCode == 83) {
-    if(RATE_NUM>0) RATE_NUM-=1
+    if (RATE_NUM > 0) RATE_NUM -= 1;
     $("#video_player_1")[0].playbackRate = RATE_MAP[RATE_NUM];
     $("#video_player_2")[0].playbackRate = RATE_MAP[RATE_NUM];
-    $('#rate')[0].innerText=RATE_MAP[RATE_NUM]+'x'
+    $("#rate")[0].innerText = RATE_MAP[RATE_NUM] + "x";
   }
   if (event.keyCode == 70) {
-    if(RATE_NUM>0) RATE_NUM+=1
+    if (RATE_NUM < RATE_MAP.length - 1) RATE_NUM += 1;
     $("#video_player_1")[0].playbackRate = RATE_MAP[RATE_NUM];
     $("#video_player_2")[0].playbackRate = RATE_MAP[RATE_NUM];
-    $('#rate')[0].innerText=RATE_MAP[RATE_NUM]+'x'
+    $("#rate")[0].innerText = RATE_MAP[RATE_NUM] + "x";
+  }
+  if (event.keyCode == 32) {
+    if (paused) {
+      paused.play();
+      paused = false;
+    } else {
+      if (!$("#video_player_1")[0].ended && !$("#video_player_1")[0].paused) {
+        paused = $("#video_player_1")[0];
+        $("#video_player_1")[0].pause();
+      } else if (
+        !$("#video_player_2")[0].ended &&
+        !$("#video_player_2")[0].paused
+      ) {
+        paused = $("#video_player_2")[0];
+        $("#video_player_2")[0].pause();
+      }
+    }
   }
 });
-
