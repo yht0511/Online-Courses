@@ -53,6 +53,7 @@ document.CatalogVariables = {};
 document.NowConfig = CatalogConfig;
 var PlayList = [];
 var now_player = "video_player_1";
+var current_num = 0;
 var FROM = 0;
 var TO = 0;
 var START = 0;
@@ -173,7 +174,7 @@ function RenderCatalog() {
       document.NowConfig[index]["name"]
     );
     var func = document.NowConfig[index]["function"];
-    console.log(document.NowConfig[index]);
+    // console.log(document.NowConfig[index]);
     var options = "";
     if (!document.NowConfig[index]["async"]) {
       options = func();
@@ -236,7 +237,7 @@ function RenderCatalog() {
               document.NowConfig[index]["clicked"].name
           );
         }
-        console.log(div);
+        // console.log(div);
         $("#Catalog").append(div);
       }
     });
@@ -249,7 +250,7 @@ document.RenderCatalog = RenderCatalog;
 function JumpToSubject() {
   GetWholeTimestamp(function (whole_from, whole_to) {
     GetSubjectTimestamp(function (subject_from, subject_to) {
-      console.log(subject_from - whole_from);
+      // console.log(subject_from - whole_from);
       Play(
         document.CatalogVariables["date"],
         whole_from,
@@ -268,7 +269,7 @@ function PlayWhole() {
 
 function PlaySubject(subject) {
   GetSubjectTimestamp(function (from, to) {
-    console.log(from, to);
+    // console.log(from, to);
     Play(document.CatalogVariables["date"], from, to, 0);
   });
 }
@@ -297,12 +298,10 @@ function Play(date, from, to, start) {
       return;
     }
     if (start_num == 9999) start_num = 0;
-    var current_num = start_num;
+    current_num = start_num;
     BASETIME = PlayList[start_num]["from"] - from;
     BASETIME_ARR = PlayList.slice(0, start_num);
     paused = false;
-    $("#video_player_1")[0].removeEventListener("ended", switch_2);
-    $("#video_player_2")[0].removeEventListener("ended", switch_1);
     $("#video_player_1")[0].pause();
     $("#video_player_2")[0].pause();
 
@@ -315,52 +314,13 @@ function Play(date, from, to, start) {
     $("#video_player_2")[0].currentTime = 0;
     $("#video_player_2").hide();
 
-    $("#video_player_1")[0].addEventListener("ended", switch_2);
-    $("#video_player_2")[0].addEventListener("ended", switch_1);
-
     $("#video_player_1")[0].playbackRate = RATE_MAP[RATE_NUM];
     $("#video_player_2")[0].playbackRate = RATE_MAP[RATE_NUM];
-
-    function switch_2() {
-      console.log("切换到player2");
-      $("#video_player_1")[0].pause();
-      $("#video_player_1").hide();
-      $("#video_player_2").show();
-      $("#video_player_2")[0].play();
-      if (BASETIME_ARR.indexOf(PlayList[current_num]) == -1) {
-        BASETIME_ARR.push(PlayList[current_num]);
-        BASETIME += PlayList[current_num]["duration"];
-      }
-      current_num += 1;
-      if (current_num >= PlayList.length) {
-        return;
-      }
-      $("#video_player_1")[0].src = BaseURI + PlayList[current_num]["path"];
-      $("#video_player_1")[0].currentTime = 0;
-    }
-
-    function switch_1() {
-      console.log("切换到player1");
-      $("#video_player_2")[0].pause();
-      $("#video_player_2").hide();
-      $("#video_player_1").show();
-      $("#video_player_1")[0].play();
-      if (BASETIME_ARR.indexOf(PlayList[current_num]) == -1) {
-        BASETIME_ARR.push(PlayList[current_num]);
-        BASETIME += PlayList[current_num]["duration"];
-      }
-      current_num += 1;
-      if (current_num >= PlayList.length) {
-        return;
-      }
-      $("#video_player_2")[0].src = BaseURI + PlayList[current_num]["path"];
-      $("#video_player_2")[0].currentTime = 0;
-    }
   });
 }
 
 $("#video_player_1")[0].addEventListener("timeupdate", function (e) {
-  if($("#video_player_1")[0].currentTime<=0) return;
+  if ($("#video_player_1")[0].currentTime <= 0) return;
   var percent =
     (100 * (BASETIME + $("#video_player_1")[0].currentTime)) / (TO - FROM);
   $("#progress")[0].style.width = percent + "%";
@@ -370,7 +330,7 @@ $("#video_player_1")[0].addEventListener("timeupdate", function (e) {
 });
 
 $("#video_player_2")[0].addEventListener("timeupdate", function (e) {
-  if($("#video_player_2")[0].currentTime<=0) return;
+  if ($("#video_player_2")[0].currentTime <= 0) return;
   var percent =
     (100 * (BASETIME + $("#video_player_2")[0].currentTime)) / (TO - FROM);
   $("#progress")[0].style.width = percent + "%";
@@ -407,7 +367,7 @@ function TimestampToStringTime(time) {
 }
 
 $(document).keydown(function (event) {
-  console.log(event);
+  // console.log(event);
   if (event.keyCode == 189) {
     $("#Catalog").hide();
   }
@@ -456,3 +416,47 @@ $(document).keydown(function (event) {
     }
   }
 });
+
+$("#video_player_1")[0].addEventListener("ended", switch_2);
+$("#video_player_2")[0].addEventListener("ended", switch_1);
+
+function switch_2() {
+  // console.log("切换到player2");
+  $("#video_player_1")[0].playbackRate = RATE_MAP[RATE_NUM];
+  $("#video_player_2")[0].playbackRate = RATE_MAP[RATE_NUM];
+  // console.log(current_num, BASETIME_ARR);
+  $("#video_player_1")[0].pause();
+  $("#video_player_1").hide();
+  $("#video_player_2").show();
+  $("#video_player_2")[0].play();
+  if (BASETIME_ARR.indexOf(PlayList[current_num]) == -1) {
+    BASETIME_ARR.push(PlayList[current_num]);
+    BASETIME += PlayList[current_num]["duration"];
+    current_num += 1;
+  }
+  if (current_num >= PlayList.length) {
+    return;
+  }
+  $("#video_player_1")[0].src = BaseURI + PlayList[current_num + 1]["path"];
+  $("#video_player_1")[0].currentTime = 0;
+}
+
+function switch_1() {
+  // console.log("切换到player1");
+  $("#video_player_1")[0].playbackRate = RATE_MAP[RATE_NUM];
+  $("#video_player_2")[0].playbackRate = RATE_MAP[RATE_NUM];
+  $("#video_player_2")[0].pause();
+  $("#video_player_2").hide();
+  $("#video_player_1").show();
+  $("#video_player_1")[0].play();
+  if (BASETIME_ARR.indexOf(PlayList[current_num]) == -1) {
+    BASETIME_ARR.push(PlayList[current_num]);
+    BASETIME += PlayList[current_num]["duration"];
+    current_num += 1;
+  }
+  if (current_num >= PlayList.length) {
+    return;
+  }
+  $("#video_player_2")[0].src = BaseURI + PlayList[current_num + 1]["path"];
+  $("#video_player_2")[0].currentTime = 0;
+}
