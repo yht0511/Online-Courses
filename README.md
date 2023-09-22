@@ -24,7 +24,7 @@ Wonderful!
 
 ### 希沃
 
-1. 自行编译`server/`下程序或下载[Releases](https://github.com/yht0511/online-courses/releases)中已编译版本.
+1. 编译`server/`中程序.
 
    编译:
 
