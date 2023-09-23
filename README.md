@@ -64,7 +64,9 @@ nohup python3 main.py > oc.log &
 
 ## 效果
 
-![效果示范](pic/1.JPG)
+![效果示范-1](pic/1.JPG)
+
+![效果示范-2](pic/2.JPG)
 
 网页播放器支持:
 
