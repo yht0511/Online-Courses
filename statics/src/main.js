@@ -327,6 +327,9 @@ $("#video_player_1")[0].addEventListener("timeupdate", function (e) {
   $("#time")[0].innerText = TimestampToStringTime(
     (percent / 100) * (TO - FROM) + FROM
   );
+  $("#subtitle")[0].innerText = GetSubtitle(
+    $("#video_player_1")[0].currentTime
+  );
 });
 
 $("#video_player_2")[0].addEventListener("timeupdate", function (e) {
@@ -337,6 +340,9 @@ $("#video_player_2")[0].addEventListener("timeupdate", function (e) {
   $("#time")[0].innerText = TimestampToStringTime(
     (percent / 100) * (TO - FROM) + FROM
   );
+  $("#subtitle")[0].innerText = GetSubtitle(
+    $("#video_player_2")[0].currentTime
+  );
 });
 
 $("#progress_bar")[0].onmousemove = function (e) {
@@ -345,6 +351,19 @@ $("#progress_bar")[0].onmousemove = function (e) {
   $("#time_hover")[0].innerText = TimestampToStringTime(
     (percent / 100) * (TO - FROM) + FROM
   );
+  var ttime = (percent / 100) * (TO - FROM) + FROM;
+  for (let i in PlayList) {
+    if (
+      parseFloat(PlayList[i]["from"]) < ttime &&
+      parseFloat(PlayList[i]["to"]) > ttime
+    ) {
+      var time =
+        (parseFloat(PlayList[i]["duration"]) *
+          (ttime - parseFloat(PlayList[i]["from"]))) /
+        (PlayList[i]["to"] - PlayList[i]["from"]);
+      $("#subtitle_hover")[0].innerText = GetSubtitle(time);
+    }
+  }
 };
 
 $("#progress_bar")[0].onclick = function (e) {
@@ -367,7 +386,7 @@ function TimestampToStringTime(time) {
 }
 
 $(document).keydown(function (event) {
-  // console.log(event);
+  console.log(event);
   if (event.keyCode == 189) {
     $("#Catalog").hide();
   }
@@ -415,6 +434,9 @@ $(document).keydown(function (event) {
       }
     }
   }
+  if (event.keyCode == 191) {
+    $("#subtitle").toggle();
+  }
 });
 
 $("#video_player_1")[0].addEventListener("ended", switch_2);
@@ -459,4 +481,22 @@ function switch_1() {
   }
   $("#video_player_2")[0].src = BaseURI + PlayList[current_num + 1]["path"];
   $("#video_player_2")[0].currentTime = 0;
+}
+
+function GetSubtitle(time) {
+  var sub = PlayList[current_num]["subtitle"];
+  var min = 9999999;
+  var ans = "";
+  for (let s in sub) {
+    if (Math.abs(time - parseFloat(sub[s]["from"])) < min) {
+      min = Math.abs(time - parseFloat(sub[s]["from"]));
+      ans = sub[s]["text"];
+    }
+    if (Math.abs(time - parseFloat(sub[s]["to"])) < min) {
+      min = Math.abs(time - parseFloat(sub[s]["to"]));
+      ans = sub[s]["text"];
+    }
+  }
+  if (min > 1) ans = "";
+  return ans;
 }
