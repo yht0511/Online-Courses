@@ -10,7 +10,10 @@ class dates_handler(tornado.web.RequestHandler):
     """
 
     def get(self):
-        self.write(json.dumps(os.listdir(save_folder)))
+        l=os.listdir(save_folder)
+        l.sort()
+        l.reverse()
+        self.write(json.dumps(l))
 
 class list_handler(tornado.web.RequestHandler):
     """
@@ -26,23 +29,11 @@ class list_handler(tornado.web.RequestHandler):
         # 获取信息
         files=os.listdir(f'{save_folder}/{query}/')
         for file in files:
-            if file.endswith('.mp4'):
-                if not os.path.exists(f'{save_folder}/{query}/{file}.json'):
-                    data={
-                        'name':file,
-                        'path':f'/records/{query}/{file}',
-                        'duration':float(json.loads(utils.cmd(f'ffprobe -i {save_folder}/{query}/{file}  -show_entries  format=duration  -v quiet -print_format json'))['format']['duration']),
-                        'size':os.path.getsize(f'{save_folder}/{query}/{file}'),
-                        'from':file.replace('.mp4','').split('-')[0],
-                        'to':file.replace('.mp4','').split('-')[1],
-                        }
-                    f=open(f'{save_folder}/{query}/{file}.json','w',encoding='utf-8')
-                    f.write(json.dumps(data,ensure_ascii=False))
-                    f.close()
-                else:
-                    f=open(f'{save_folder}/{query}/{file}.json','r',encoding='utf-8')
-                    data=json.loads(f.read())
-                    f.close()
+            json_file=file.replace('.mp4','.json')
+            if file.endswith('.mp4') and os.path.exists(f'{save_folder}/{query}/{json_file}'):
+                f=open(f'{save_folder}/{query}/{json_file}','r',encoding='utf-8')
+                data=json.loads(f.read())
+                f.close()
                 Data.append(data)
         # 返回信息
         self.write(json.dumps(Data))
