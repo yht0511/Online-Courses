@@ -126,3 +126,45 @@ html,body{
     font-size: 25px;
     color:aqua;
 }
+
+#subtitle{
+    position: fixed;
+    z-index: 30;
+    width: 60%;
+    left:20%;
+    height: 50px;
+    bottom: 50px;
+    text-align: center;
+    line-height: 50px;
+    font-size: 25px;
+    color:rgb(200, 255, 0);
+    background-color: #28919f99;
+    overflow-x: hidden;
+    overflow-y: hidden;
+    pointer-events: none;
+}
+
+#subtitle_hover{
+    position: fixed;
+    z-index: 30;
+    width: 60%;
+    left:20%;
+    height: 50px;
+    bottom: 50px;
+    text-align: center;
+    line-height: 50px;
+    font-size: 25px;
+    color:rgb(200, 255, 0);
+    background-color: #28919f99;
+    overflow-x: hidden;
+    overflow-y: hidden;
+    visibility: hidden;
+}
+
+#progress_bar:hover #subtitle{
+    visibility: hidden;
+}
+
+#progress_bar:hover #subtitle_hover{
+    visibility: visible;
+}
