@@ -1,6 +1,7 @@
 import datetime
 import os
 import sys
+import time
 import utils
 from settings import *
 
@@ -58,7 +59,9 @@ def ls(path):
                     res[i]=res[i][len(res[i])-1-j]
                     break
         return res
-    return False
+    time.sleep(1)
+    print(f'[ERROR] 阿里云盘无法列出目录,重试中...')
+    return ls(path)
     
 def clear():
     while usage()>maximum_usage:
