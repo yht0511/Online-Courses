@@ -87,7 +87,9 @@ function GetJSONSubjects(callback) {
 // 获取当天科目
 function GetSubjects(callback, all) {
   GetJSONSubjects(function (res) {
-    var r = res[new Date(document.CatalogVariables["date"]).getDay() - 1];
+    var day = new Date(document.CatalogVariables["date"]).getDay() - 1;
+    if (new Date(document.CatalogVariables["date"]).getDay() == 0) day = 6;
+    var r = res[day];
     if (all) {
       callback(r);
       return;
