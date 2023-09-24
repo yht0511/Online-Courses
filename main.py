@@ -7,6 +7,7 @@ import time
 import os
 import handlers
 import utils
+import reprocess
 
 if __name__ == '__main__':
     # 初始化文件
@@ -15,8 +16,6 @@ if __name__ == '__main__':
     if os.path.exists(temp_folder):
         utils.remove(temp_folder)
     os.mkdir(temp_folder)
-    # 启动同步线程
-    sync.sync()
     # 启动服务器
     app = web.Application(handlers=[
         (r"/dates", handlers.dates_handler),
@@ -29,4 +28,8 @@ if __name__ == '__main__':
     http_server = httpserver.HTTPServer(app)
     http_server.listen(port=http_port, address=http_host)
     print("程序已启动.\n地址:http://{}:{}/index.html".format(http_host, http_port))
+    # 启动同步线程
+    sync.sync()
+    # 启动后处理线程
+    reprocess.run()
     ioloop.IOLoop.instance().start()
