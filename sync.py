@@ -78,6 +78,7 @@ def sync_file(path):
             f'ffmpeg -i {temp_folder}/{download_folder}/{path}/sync.mp4 -i {temp_folder}/{download_folder}/{path}/sync.wav -c:v copy -c:a aac -strict experimental {save_folder}/{date}/{name}.mp4')
         # 删除临时文件
         utils.remove(f'{temp_folder}{download_folder}/{path}')
+        print(f'下载完成:{save_folder}/{path}.mp4')
     except:
         pass
     thread_num-=1
