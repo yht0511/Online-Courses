@@ -62,7 +62,7 @@ def record_video(Time=10,path=f'{temp_folder}/video.avi'):
             time.sleep(0.001)
         try:
             img = pyautogui.screenshot()
-            img = cv2.cvtColor(np.asarray(img), cv2.COLOR_RGB2BGR)
+            img = cv2.resize(cv2.cvtColor(np.asarray(img), cv2.COLOR_RGB2BGR),screen_size)
             video_writer.write(img)
             frame_num+=1
         except:
@@ -93,4 +93,3 @@ def record(Time=10):
 t = threading.Thread(target=record_audio_thread)
 t.daemon = True
 t.start()
-record()
