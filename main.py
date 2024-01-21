@@ -8,6 +8,8 @@ import os
 import handlers
 import utils
 import reprocess
+import clear
+import web_rep
 
 if __name__ == '__main__':
     # 初始化文件
@@ -19,8 +21,10 @@ if __name__ == '__main__':
     # 启动服务器
     app = web.Application(handlers=[
         (r"/dates", handlers.dates_handler),
+        (r"/check_code", handlers.password_handler),
+        (r"/check", handlers.check_handler),
         (r"/list", handlers.list_handler),
-        (r"/records/(.*)", web.StaticFileHandler, {'path': save_folder}),
+        (r"/records/(.*)", web_rep.StaticFileHandler, {'path': save_folder}),
         (r"/(.*)", web.StaticFileHandler,
          {'path': 'statics/', 'default_filename': "index.html"}),
     ],
@@ -32,4 +36,6 @@ if __name__ == '__main__':
     sync.sync()
     # 启动后处理线程
     reprocess.run()
+    # 启动清扫线程
+    clear.run()
     ioloop.IOLoop.instance().start()
