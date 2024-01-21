@@ -70,16 +70,17 @@ def clear():
         m=9999
         d=9999
         min_dir=''
-        for d in dirs:
-            if y>int(d.split('-')[0]):
-                y=int(d.split('-')[0])
-                min_dir=d
-            elif y==int(d.split('-')[0]) and m>int(d.split('-')[1]):
-                m=y>int(d.split('-')[1])
-                min_dir=d
-            elif y==int(d.split('-')[0]) and m==int(d.split('-')[1]) and d>int(d.split('-')[2]):
-                d=int(d.split('-')[2])
-                min_dir=d
+        for di in dirs:
+            di=di.replace('/','')
+            if y>int(di.split('-')[0]):
+                y=int(di.split('-')[0])
+                min_dir=di
+            elif y==int(di.split('-')[0]) and m>int(di.split('-')[1]):
+                m=y>int(di.split('-')[1])
+                min_dir=di
+            elif y==int(di.split('-')[0]) and m==int(di.split('-')[1]) and d>int(di.split('-')[2]):
+                d=int(di.split('-')[2])
+                min_dir=di
         remove(f'{download_folder}/{min_dir}')
     return True
 
