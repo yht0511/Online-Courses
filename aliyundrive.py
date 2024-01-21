@@ -64,7 +64,7 @@ def ls(path):
     return ls(path)
     
 def clear():
-    while usage()>maximum_usage:
+    while usage()>remote_disk_maximum_usage:
         dirs=ls(download_folder)
         y=9999
         m=9999

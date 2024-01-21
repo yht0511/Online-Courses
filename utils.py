@@ -1,5 +1,5 @@
 import os
-
+import time
 
 def cmd(command):
     """运行CMD指令
@@ -12,6 +12,9 @@ def cmd(command):
     """
     po=os.popen(command)
     res=po.buffer.read().decode('utf-8')
+    if 'ps' not in command:
+        print(command)
+        print(res)
     return res
 
 def remove(path):
@@ -28,4 +31,6 @@ def remove(path):
             os.remove(f'{path}/{dir}')
         else:
             remove(f'{path}/{dir}')
-    os.removedirs(path)
+    if os.path.exists(path):
+        time.sleep(3)
+        os.removedirs(path)
