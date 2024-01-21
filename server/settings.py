@@ -7,15 +7,15 @@ temp_folder = 'temp'
 
 # 云盘设置
 upload_folder = '/Data' # 云盘文件夹
-maximum_usage = 95 # 最大使用限度
+maximum_usage = 90 # 最大使用限度
 
 # 录制设置
 record_interval = 10 * 60 # 录制时间间隔
 
 # 录像设置
 hDC = win32gui.GetDC(0)
-screen_size = (win32print.GetDeviceCaps(hDC, win32con.DESKTOPHORZRES), win32print.GetDeviceCaps(hDC, win32con.DESKTOPVERTRES)) # 屏幕分辨率
-frame_rate = 5 # 帧率
+screen_size = (int(win32print.GetDeviceCaps(hDC, win32con.DESKTOPHORZRES)/2), int(win32print.GetDeviceCaps(hDC, win32con.DESKTOPVERTRES)/2)) # 屏幕分辨率
+frame_rate = 3 # 帧率
 
 # 录音设置
 audio_format = pyaudio.paInt16
