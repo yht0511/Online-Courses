@@ -10,9 +10,16 @@
     <meta name="apple-mobile-web-app-status-bar-style" content="white" />
     <link rel="stylesheet" href="/src/style.css" />
     <script src="https://apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js"></script>
+    <script src="https://cdn.bootcss.com/blueimp-md5/2.12.0/js/md5.min.js"></script>
   </head>
   <meta name="apple-mobile-web-app-title" content="OnlineCourses" />
   <body>
+    <div id="mask">
+      <div style="height:30%;"></div>
+      <h1 style="color:aliceblue;">Tclab</h1>
+      <h2 style="color:aquamarine;">希 沃 监 测 系 统 </h2>
+      <h3 style="color:aliceblue;">LOADING...</h3>
+    </div>
     <div id="Main">
       <div id="Player">
         <video src="" id="video_player_1" class="video_player" preload></video>
@@ -29,6 +36,10 @@
       </div>
       <div id="Catalog"></div>
       <div id="CatalogButton"></div>
+      <div id="stop" style="text-align:center;position:absolute;top:calc(50% - 40px);right:10px;width:30px;height:30px;background-color:rgba(0,0,0,0.6);">!s</div>
+      <div id="switch_sidebar" style="text-align:center;position:absolute;top:50%;right:10px;width:30px;height:30px;background-color:rgba(0,0,0,0.6);"><|</div>
+      <div id="lower" style="text-align:center;position:absolute;top:calc(50% + 40px);right:10px;width:30px;height:30px;background-color:rgba(0,0,0,0.6);"><<</div>
+      <div id="faster" style="text-align:center;position:absolute;top:calc(50% + 80px);right:10px;width:30px;height:30px;background-color:rgba(0,0,0,0.6);">>></div>
     </div>
     <script type="module" src="/src/main.js"></script>
   </body>
