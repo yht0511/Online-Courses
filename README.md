@@ -53,7 +53,10 @@ Wonderful!
 推荐在Linux系统上部署.
 
 ```shell
-apt install ffmpeg git python3 python-pip git -y # 安装必要的软件包
+apt install ffmpeg git python3 python3-pip python-pip git -y # 安装必要的软件包
+git clone https://github.com/SocialSisterYi/bcut-asr
+cd bcut-asr
+./setup.py install
 git clone https://github.com/yht0511/online-courses.git
 cd online-courses
 pip install -r requirements.txt # 安装依赖
